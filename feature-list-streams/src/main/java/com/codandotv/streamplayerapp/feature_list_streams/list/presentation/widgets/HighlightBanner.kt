@@ -90,7 +90,7 @@ fun BackgroundGradient(modifier: Modifier = Modifier) {
                 brush = Brush.verticalGradient(
                     colors = listOf(
                         Color.Transparent,
-                        Color.Black
+                        MaterialTheme.colorScheme.background
                     ),
                 )
             )

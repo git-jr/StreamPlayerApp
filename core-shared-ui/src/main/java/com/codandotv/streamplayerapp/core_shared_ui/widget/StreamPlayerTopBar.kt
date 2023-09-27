@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -80,7 +81,7 @@ private fun StreamPlayerTopBar(
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = stringResource(id = R.string.icon_search),
-                tint = Color.White,
+                tint = MaterialTheme.colorScheme.onBackground,
             )
         }
 
@@ -118,17 +119,17 @@ private fun StreamPlayerOptionsTopBar(modifier: Modifier, scrollBehavior: TopApp
                 Text(
                     text = stringResource(id = R.string.topbar_shows),
                     modifier = Modifier.weight(1f),
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
                     text = stringResource(id = R.string.topbar_movies),
                     modifier = Modifier.weight(1f),
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
                     text = stringResource(id = R.string.topbar_categories),
                     modifier = Modifier.weight(1f),
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
         }, colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Transparent)

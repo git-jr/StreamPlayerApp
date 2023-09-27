@@ -1,6 +1,7 @@
 package com.codandotv.streamplayerapp.feature_profile.profile.presentation.screens
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -12,7 +13,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -25,6 +30,7 @@ import com.codandotv.streamplayerapp.core_shared_ui.theme.ThemePreview
 import com.codandotv.streamplayerapp.core_shared_ui.theme.ThemePreviews
 import com.codandotv.streamplayerapp.feature.profile.R
 import com.codandotv.streamplayerapp.feature_profile.profile.domain.ProfileStream
+import com.codandotv.streamplayerapp.feature_profile.profile.presentation.dynamicColors.getPaletteColor
 import com.codandotv.streamplayerapp.feature_profile.profile.presentation.widget.LoadScreen
 import com.codandotv.streamplayerapp.feature_profile.profile.presentation.widget.ProfilePickerOpacityLayer
 import com.codandotv.streamplayerapp.feature_profile.profile.presentation.widget.ProfilePickerProfilesGrid
@@ -33,15 +39,26 @@ import com.codandotv.streamplayerapp.feature_profile.profile.presentation.widget
 import com.codandotv.streamplayerapp.feature_profile.profile.presentation.widget.dpToPx
 import org.koin.androidx.compose.koinViewModel
 
+
 @Composable
 fun ProfilePickerStreamScreen(
     viewModel: ProfilePickerStreamViewModel = koinViewModel(),
-    onNavigateListStreams: (String) -> Unit = {},
+    onNavigateListStreams: (List<Pair<Color, String>>, String) -> Unit = { _, _ -> },
     disposable: () -> Unit = {}
 ) {
+    var image by remember { mutableStateOf<Bitmap?>(null) }
+    var navigateListStreams by remember { mutableStateOf(false) }
+
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
     Lifecycle(lifecycleOwner, viewModel, disposable)
+
+    LaunchedEffect(navigateListStreams) {
+        image?.let {
+            onNavigateListStreams(getPaletteColor(it), uiState.selectedItem?.imageUrl ?: "")
+        }
+    }
+
 
     if (uiState.isLoading) {
         LoadScreen()
@@ -52,11 +69,16 @@ fun ProfilePickerStreamScreen(
             onSetLastItemPositioned = { viewModel.setLastItemPositioned(it) },
             onSetHaltSizeImage = { viewModel.setHaltSizeImage(it) },
             onSetHalfExpandedSizeImage = { viewModel.setHalfExpandedSizeImage(it) },
-            onClickSelectedProfile = { viewModel.moveSelectedProfileToCenterImage(it) },
+            onClickSelectedProfile = { profileStream, bitmap ->
+                image = bitmap
+                viewModel.moveSelectedProfileToCenterImage(profileStream)
+            },
             onSetScreenSize = { width, height, widthPx, heightPx ->
                 viewModel.setScreenSize(width, height, widthPx, heightPx)
             },
-            onNavigateListStreams = onNavigateListStreams,
+            onNavigateListStreams = {
+                navigateListStreams = true
+            },
         )
     }
 }
@@ -71,7 +93,7 @@ private fun SetupProfilePickerScreen(
     onSetLastItemPositioned: (Boolean) -> Unit = {},
     onSetHaltSizeImage: (Int) -> Unit = { },
     onSetHalfExpandedSizeImage: (Int) -> Unit = { },
-    onClickSelectedProfile: (ProfileStream) -> Unit = {},
+    onClickSelectedProfile: (ProfileStream, Bitmap?) -> Unit = { _, _ -> },
     onNavigateListStreams: (String) -> Unit = {}
 ) {
     val animatedOpacityBackground by animateColorAsState(

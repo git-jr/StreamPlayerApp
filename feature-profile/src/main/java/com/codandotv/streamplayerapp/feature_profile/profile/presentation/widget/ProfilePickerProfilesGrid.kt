@@ -1,5 +1,6 @@
 package com.codandotv.streamplayerapp.feature_profile.profile.presentation.widget
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -22,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.drawable.toBitmap
 import coil.compose.AsyncImage
 import com.codandotv.streamplayerapp.feature.profile.R
 import com.codandotv.streamplayerapp.feature_profile.profile.domain.ProfileStream
@@ -32,7 +38,7 @@ fun ProfilePickerProfilesGrid(
     uiState: ProfilePickerStreamsUIState,
     animatedProfileAlpha: Float,
     onSetScreenSize: (Float, Float, Int, Int) -> Unit,
-    onClickSelectedProfile: (ProfileStream) -> Unit,
+    onClickSelectedProfile: (ProfileStream, Bitmap?) -> Unit,
     onSetLastItemPositioned: (Boolean) -> Unit
 ) {
     BoxWithConstraints(
@@ -79,8 +85,9 @@ private fun ProfileItem(
     state: ProfilePickerStreamsUIState,
     profileItemPosition: IntOffset,
     profile: ProfileStream,
-    onClickSelectedProfile: (ProfileStream) -> Unit
+    onClickSelectedProfile: (ProfileStream, Bitmap?) -> Unit
 ) {
+    var selectedImageBitmap by remember { mutableStateOf<Bitmap?>(null) }
     with(state) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -101,8 +108,11 @@ private fun ProfileItem(
                     .alpha(if (selectedItem == profile) selectedImageAlpha else 1f)
                     .size(defaultImageSize.dp)
                     .clickable {
-                        onClickSelectedProfile(profile)
-                    }
+                        onClickSelectedProfile(profile, selectedImageBitmap)
+                    },
+                onSuccess = { result ->
+                    selectedImageBitmap = result.result.drawable.toBitmap().copy(Bitmap.Config.ARGB_8888, true)
+                }
             )
 
             Text(

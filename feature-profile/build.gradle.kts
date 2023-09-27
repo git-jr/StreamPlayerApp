@@ -15,6 +15,7 @@ dependencies {
     implementation(libs.bundles.networking)
     implementation(libs.bundles.androidSupport)
     implementation(libs.coil)
+    implementation(libs.palette)
 
     testImplementation(libs.bundles.test)
 }

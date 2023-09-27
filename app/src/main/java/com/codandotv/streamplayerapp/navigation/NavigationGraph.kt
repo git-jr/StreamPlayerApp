@@ -20,7 +20,10 @@ import com.codandotv.streamplayerapp.feature_profile.profile.presentation.naviga
 import com.codandotv.streamplayerapp.splah.presentation.navigation.splashNavGraph
 
 @Composable
-fun NavigationGraph(navController: NavHostController) {
+fun NavigationGraph(
+    navController: NavHostController,
+    onChangeThemeColors: (List<Pair<Color, String>>) -> Unit
+) {
     NavHost(navController = navController, startDestination = Routes.Splash) {
         splashNavGraph(navController = navController)
         listStreamsNavGraph(navController = navController)
@@ -29,7 +32,12 @@ fun NavigationGraph(navController: NavHostController) {
         temporaryFun(BottomNavRoutes.NEWS, navController)
         temporaryFun(BottomNavRoutes.SCENES, navController)
         temporaryFun(BottomNavRoutes.DOWNLOADS, navController)
-        profilePickerStreamNavGraph(navController = navController)
+        profilePickerStreamNavGraph(
+            navController = navController,
+            onChangeThemeColors = {
+                onChangeThemeColors(it)
+            }
+        )
     }
 }
 
