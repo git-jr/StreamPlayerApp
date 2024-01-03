@@ -7,7 +7,7 @@
 <a href="https://www.youtube.com/c/CodandoTV"><img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white" height="20px"/></a>
 </h3> 
 
-![Logo do Projeto](file_readme/codandotv.png)
+![Logo do Projeto](Android-Nativo/file_readme/codandotv.png)
 
 ## 🎯 Sobre o Projeto
 O projeto StreamPlayerApp é um clone do Netflix, desenvolvido de forma colaborativa e gratuita para a comunidade. O objetivo é proporcionar uma experiência de aprendizado e prática de programação, além de servir como uma plataforma de mentoria. Por causa disso estaremos utilizando todas as tecnologias mais atuais de desenvolvimento android como:
@@ -74,7 +74,7 @@ Criei um `discussions` e la além de ficar no histórico, se quiser olhar o exem
 
 ## 👀 Quer ver como esta ficando?
 
-<img src="file_readme/splash_list_detail.gif" alt="atualizado dia 22/05/2023" width="200" height="400">
+<img src="Android-Nativo/file_readme/splash_list_detail.gif" alt="atualizado dia 22/05/2023" width="200" height="400">
 
 ---
 
